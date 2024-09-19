@@ -33,4 +33,5 @@ MaxDepth = 1
 
 Tree = decisiontree.ID3(S, Attributes, Label, Gain, MaxDepth)
 
-
+ex = {"Outlook":"Sunny","Temperature":"Hot","Humidity":"High","Wind":"Weak"}
+print(decisiontree.prediction(Tree,ex))

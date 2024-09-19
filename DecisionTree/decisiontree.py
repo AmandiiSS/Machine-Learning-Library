@@ -184,12 +184,12 @@ def select_examples_v(S, attribute_name, value):
 
 
 
-#This recursive function returns a prediction for the example given
-def prediction(Tree, example):
+#This recursive function returns a prediction for the example_test given, which is just a dictionary
+def prediction(Tree:Node, example_test):
     #Base case
-    if Tree.label() != "":
-        return Tree.label()
+    if Tree.label_result != "":
+        return Tree.label_result
     #Recursion
-    
-
+    value = example_test[Tree.attr]
+    label_predicted: str = prediction(Tree.branches[value],example_test)
     return label_predicted
