@@ -1,7 +1,9 @@
 #All import necessaries
 import math
 from collections import Counter
-
+#import sys
+#print(sys.getrecursionlimit())
+#sys.setrecursionlimit(1500)
 
 #Class: Node
 #The @attribute will represent the "type" of the node.
@@ -15,6 +17,7 @@ class Node:
     def __init__(self, attribute: str = "", label: str = ""):
         self.attr = attribute
         self.label_result = label 
+        self.branches = {}
     def add_decision_branch(self, attr_value: str, child):
         self.branches[attr_value] = child
     
@@ -44,7 +47,7 @@ def ID3(S, Attributes, Label, Gain = "information", MaxDepth = 10):
             #2. Let Sv be the subset of examples with A=v:
                 #If Sv is empty: we create a leaf node with the most common value of Label in S
                 #Else below this branch, add the subtree ID3(Sv, Attibutes-{A}, Label, Gain, MaxDepth-1)
-        newAttributes = Attributes
+        newAttributes = Attributes.copy()
         del newAttributes[BestA[0]]
         for v in BestA[1]:
             Sv = select_examples_v(S, BestA[0], v)
@@ -187,7 +190,7 @@ def select_examples_v(S, attribute_name, value):
 #This recursive function returns a prediction for the example_test given, which is just a dictionary
 def prediction(Tree:Node, example_test):
     #Base case
-    if Tree.label_result != "":
+    if Tree.label_result != "" and Tree.label_result != None:
         return Tree.label_result
     #Recursion
     value = example_test[Tree.attr]
