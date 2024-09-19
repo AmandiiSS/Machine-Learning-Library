@@ -17,9 +17,7 @@ class Node:
         self.label_result = label 
     def add_decision_branch(self, attr_value: str, child):
         self.branches[attr_value] = child
-
-    #TODO: potentially add a function internally, where it will take the path based on the label???        
-
+    
 
 #S is the set of examples (list (set of examples) of list (example) of ditionary (attributes and their "values" for the example) and strings or ints (labels))
 #Attributes is the set of attributes available (dictionary key=attributes and values is a list of all values that the attribute key can have)
@@ -28,7 +26,7 @@ class Node:
 #   either information, me or gini
 #MaxDepth is the maximum depth we want the tree to have (integer)
 
-def ID3(S, Attributes, Label, Gain, MaxDepth):
+def ID3(S, Attributes, Label, Gain = "information", MaxDepth = 10):
     sameLabel = same_label(S)
     commonLabel = common_label(S)
     #If all examples have the same label or Attibutes is empty or MaxDepth = 0 return a leaf node
@@ -46,11 +44,14 @@ def ID3(S, Attributes, Label, Gain, MaxDepth):
             #2. Let Sv be the subset of examples with A=v:
                 #If Sv is empty: we create a leaf node with the most common value of Label in S
                 #Else below this branch, add the subtree ID3(Sv, Attibutes-{A}, Label, Gain, MaxDepth-1)
+        newAttributes = Attributes
+        del newAttributes[BestA[0]]
         for v in BestA[1]:
             Sv = select_examples_v(S, BestA[0], v)
-            newAttributes = Attributes
-            del newAttributes[BestA[0]]
-            root_node.add_decision_branch(v, ID3(Sv,newAttributes, Label, Gain, MaxDepth-1))
+            if Sv == []:
+                root_node.add_decision_branch(v, Node("",common_label(S)))
+            else:
+                root_node.add_decision_branch(v, ID3(Sv,newAttributes, Label, Gain, MaxDepth-1))
         #Return Root Node
         return root_node
 
@@ -69,7 +70,10 @@ def same_label(S):
 #This function returns the most common label among the ones from the set of examples S
 def common_label(S):
     #This probably does not work as intended
-    labelsAndValues = Counter(S[:][1])
+    labelList = []
+    for s in S:
+        labelList.append(s[1])
+    labelsAndValues = Counter(labelList)
     return max(labelsAndValues, key=labelsAndValues.get)
 
 
@@ -96,22 +100,24 @@ def best_attribute(S, Attributes, Gain):
 def informationGain(S, A):
     #Calculate the general entropy
     generalEntropy = entropy(S)
-    infogain = 0
+    infogain = generalEntropy
     #Get the examples with attribute == A
     for v in A[1]:
         Sv = select_examples_v(S, A[0], v)
-        infogain += entropy(Sv)
+        if Sv != []:
+            infogain -= (len(Sv)/len(S))*entropy(Sv)
     return infogain
 
 #This function calculates and returns the majority error gain of the set of examples S of attribute A
 def meGain(S, A):
     #Calculate the general majority error
     generalMajorityError = majorityError(S)
-    megain = 0
+    megain = generalMajorityError
     #Get the examples with attribute == A
     for v in A[1]:
         Sv = select_examples_v(S, A[0], v)
-        megain += majorityError(Sv)
+        if Sv != []:
+            megain -= (len(Sv)/len(S))*majorityError(Sv)
     return megain
     
 
@@ -119,21 +125,22 @@ def meGain(S, A):
 def giniGain(S, A):
     #Calculate the general majority error
     generalGiniIndex = giniIndex(S)
-    ginigain = 0
+    ginigain = generalGiniIndex
     #Get the examples with attribute == A
     for v in A[1]:
         Sv = select_examples_v(S, A[0], v)
-        ginigain += giniIndex(Sv)
+        if Sv != []:
+            ginigain -= (len(Sv)/len(S))*giniIndex(Sv)
     return ginigain
     
 
 #This function calculates and returns the entropy of the set of examples S
 def entropy(S):
     #labelDistribution is a dictionary with labels as keys and the number of that labels among S as values
-    labelDistribution = labelDistribution(S)
+    labelDistribution = label_distribution(S)
     totalLabels = sum(labelDistribution.values())
     H = 0
-    for i in labelDistribution.values():
+    for i in list(labelDistribution.values()):
         H += -(i/totalLabels)*math.log2(i/totalLabels)
     return H
 
@@ -141,10 +148,10 @@ def entropy(S):
 #This function calculates and returns the gini index of the set of examples S
 def giniIndex(S):
     #labelDistribution is a dictionary with labels as keys and the number of that labels among S as values
-    labelDistribution = labelDistribution(S)
+    labelDistribution = label_distribution(S)
     totalLabels = sum(labelDistribution.values())
     not_gi = 0
-    for i in labelDistribution.values():
+    for i in list(labelDistribution.values()):
         not_gi += (i/totalLabels)**2
     return 1-not_gi
 
@@ -152,15 +159,18 @@ def giniIndex(S):
 #This function calculates and returns the majority error of the set of examples S
 def majorityError(S):
     #labelDistribution is a dictionary with labels as keys and the number of that labels among S as values
-    labelDistribution = labelDistribution(S)
+    labelDistribution = label_distribution(S)
     totalLabels = sum(labelDistribution.values())
-    me = max(labelDistribution.values())/totalLabels
+    me = 1- max(labelDistribution.values())/totalLabels
     return me
 
 
 #This function returns a dictionary with labels as keys and the number of times the labels appear among S as values
-def labelDistribution(S):
-    labelsAndValues = Counter(S[:][1])
+def label_distribution(S):
+    labelList = []
+    for s in S:
+        labelList.append(s[1])
+    labelsAndValues = Counter(labelList)
     return labelsAndValues
 
 
@@ -171,3 +181,15 @@ def select_examples_v(S, attribute_name, value):
         if s[0][attribute_name] == value:
             Sv.append(s)
     return Sv
+
+
+
+#This recursive function returns a prediction for the example given
+def prediction(Tree, example):
+    #Base case
+    if Tree.label() != "":
+        return Tree.label()
+    #Recursion
+    
+
+    return label_predicted
