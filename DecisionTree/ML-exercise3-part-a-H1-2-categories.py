@@ -26,9 +26,7 @@ def add_example_to_S(example_list,media_age,media_balance,media_day,media_durati
         campaign_value = "bigger" 
     else:
         campaign_value = "lesseq"
-    if float(example_list[12]) == -1:
-        pdays_value = "no" 
-    elif float(example_list[12]) > media_pdays:
+    if float(example_list[12]) > media_pdays:
         pdays_value = "bigger"
     else:
         pdays_value = "lesseq"
@@ -61,7 +59,7 @@ Attributes = {
     "month":["jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"],
     "duration":["bigger","lesseq"],
     "campaign":["bigger","lesseq"],
-    "pdays":["bigger","lesseq","no"],
+    "pdays":["bigger","lesseq"],
     "previous":["bigger","lesseq"],
     "poutcome":["unknown","other","failure","success"],
 }
@@ -85,8 +83,7 @@ with open(CSVfile, 'r') as f:
         day.append(float(example_list[9]))
         duration.append(float(example_list[11]))
         campaign.append(float(example_list[12]))
-        if float(example_list[13]) != -1:
-            pdays.append(float(example_list[13]))
+        pdays.append(float(example_list[13]))
         previous.append(float(example_list[14]))
 
 media_age = statistics.median(age)
@@ -145,9 +142,7 @@ for gain in gain_list:
                     campaign_value = "bigger" 
                 else:
                     campaign_value = "lesseq"
-                if float(example_to_test[12]) == -1:
-                    pdays_value = "no" 
-                elif float(example_to_test[12]) > media_pdays:
+                if float(example_to_test[12]) > media_pdays:
                     pdays_value = "bigger"
                 else:
                     pdays_value = "lesseq"
@@ -211,9 +206,7 @@ for gain in gain_list:
                     campaign_value = "bigger" 
                 else:
                     campaign_value = "lesseq"
-                if float(example_to_test[12]) == -1:
-                    pdays_value = "no" 
-                elif float(example_to_test[12]) > media_pdays:
+                if float(example_to_test[12]) > media_pdays:
                     pdays_value = "bigger"
                 else:
                     pdays_value = "lesseq"
@@ -240,5 +233,3 @@ print("Predicted error with me gain: ")
 print(pred_error_me)
 print("Predicted error with gini gain: ")
 print(pred_error_gini)
-
-
