@@ -1,6 +1,7 @@
 import statistics
 import adaboost
 import time
+import decisiontree
 
 def add_example_to_S(example_list,media_age,media_balance,media_day,media_duration,media_campaign,media_pdays,media_previous):
     if float(example_list[0]) > media_age:
@@ -109,7 +110,9 @@ gain = "information"
 total_examples = 5000
 
 training_errors = []
+training_errors_tree_stump = []
 test_errors = []
+test_errors_tree_stump = []
 
 Trees_and_votes = adaboost.AdaBoost_decisiontree(S,Attributes,Label,gain,depth,500)
 
@@ -117,6 +120,7 @@ for i in range(500):
     print("Iteration: ", i)
     ########################### TRAINING DATA
     error_i_train = 0
+    error_i_train_tree_stump = 0
     CSVfile = 'bank/train.csv'
     with open(CSVfile, 'r') as f:
         for line in f:
@@ -159,8 +163,15 @@ for i in range(500):
             if (predicted_label != example_to_test[16]):
                 error_i_train += 1/total_examples
 
+            #Run the i-th tree to get the training error from that tree
+            Tree_stump = Trees_and_votes[i][1]
+            predicted_label_decision_stump = decisiontree.prediction(Tree_stump,test)
+            if (predicted_label_decision_stump != example_to_test[16]):
+                error_i_train_tree_stump += 1/total_examples
+
     ########################### TEST DATA
     error_i_test = 0
+    error_i_test_tree_stump = 0
     CSVfile = 'bank/test.csv'
     with open(CSVfile, 'r') as f:
         for line in f:
@@ -202,9 +213,23 @@ for i in range(500):
             if (predicted_label != example_to_test[16]):
                 error_i_test += 1/total_examples
 
+            #Run the i-th tree to get the training error from that tree
+            Tree_stump = Trees_and_votes[i][1]
+            predicted_label_decision_stump = decisiontree.prediction(Tree_stump,test)
+            if (predicted_label_decision_stump != example_to_test[16]):
+                error_i_test_tree_stump += 1/total_examples
+
     training_errors.append(error_i_train)
+    training_errors_tree_stump.append(error_i_train_tree_stump)
     test_errors.append(error_i_test)
+    test_errors_tree_stump.append(error_i_test_tree_stump)
 
 
+print("Training over T:")
 print(training_errors)
+print("Test over T:")
 print(test_errors)
+print("Training over each decision stump:")
+print(training_errors_tree_stump)
+print("Test over each decision stump:")
+print(test_errors_tree_stump)

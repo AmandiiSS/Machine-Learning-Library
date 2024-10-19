@@ -2,9 +2,6 @@ import decisiontree
 import time
 import statistics
 
-#Question: the change from numerical attributes to categorical (or binary) has to
-#be done inside the algorithm or it can be done outside of it?
-
 def add_example_to_S(example_list,media_age,media_balance,media_day,media_duration,media_campaign,media_pdays,media_previous):
     if float(example_list[0]) > media_age:
         age_value = "bigger" 
@@ -145,13 +142,13 @@ for gain in gain_list:
                     campaign_value = "bigger" 
                 else:
                     campaign_value = "lesseq"
-                if float(example_to_test[12]) == -1:
+                if float(example_to_test[13]) == -1:
                     pdays_value = "no" 
-                elif float(example_to_test[12]) > media_pdays:
+                elif float(example_to_test[13]) > media_pdays:
                     pdays_value = "bigger"
                 else:
                     pdays_value = "lesseq"
-                if float(example_to_test[13]) > media_previous:
+                if float(example_to_test[14]) > media_previous:
                     previous_value = "bigger" 
                 else:
                     previous_value = "lesseq"
@@ -211,13 +208,13 @@ for gain in gain_list:
                     campaign_value = "bigger" 
                 else:
                     campaign_value = "lesseq"
-                if float(example_to_test[12]) == -1:
+                if float(example_to_test[13]) == -1:
                     pdays_value = "no" 
-                elif float(example_to_test[12]) > media_pdays:
+                elif float(example_to_test[13]) > media_pdays:
                     pdays_value = "bigger"
                 else:
                     pdays_value = "lesseq"
-                if float(example_to_test[13]) > media_previous:
+                if float(example_to_test[14]) > media_previous:
                     previous_value = "bigger" 
                 else:
                     previous_value = "lesseq"
