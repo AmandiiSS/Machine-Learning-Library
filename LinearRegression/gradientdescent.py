@@ -1,4 +1,6 @@
 
+import random
+
 def dot(x, y):
     dot_result = 0
     for i in range(len(x)):
@@ -52,18 +54,28 @@ def GradientDescent (w0,X,y,r,max_it):
     return [w0,converge, it, function_values]
 
 #REVISAR
-def StochGradientDescent (w0,X,y,r):
-    stop = False
-    while(not stop):
-        for i in len(y):
-            w = []
-            for j in range(len(w0)):
-                xi = np.array(X[i])
-                w.append(w0[j] +r*(y[i] - np.dot(w0, xi))*X[i][j])
+def StochGradientDescent (w0,X,y,r,max_it):
+    converge = False
+    it = 0
+    function_values = []
+    
+    while (not converge) and (it<max_it):
+        it += 1
+        w = []
+        #Select a random index
+        i = random.randint(0, len(y) - 1)
+        xi = X[i]
+        for j in range(len(w0)):
+            w.append(w0[j] +r*(y[i] - dot(w0, xi))*X[i][j])
+        #Calculate LMS
+        func_val_i = 0
+        for i in range(len(y)):
+            func_val_i += 0.5*pow((y[i] - dot(w, X[i])),2)
+        function_values.append(func_val_i)
         #See if we want to stop or not
-        normww0 = np.linalg.norm(np.array(w)-np.array(w0))
+        normww0 = norm2(subtract(w,w0))
         if normww0 <10e-6:
-            stop = True
+            converge = True
         else:
             w0 = w
-    return w0
+    return [w0, converge, it, function_values]

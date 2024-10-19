@@ -1,7 +1,7 @@
 import gradientdescent
 
 w0 = [0]*8
-r = 0.01498
+r = 0.001
 X = []
 y = []
 
@@ -16,8 +16,8 @@ with open(CSVfile, 'r') as f:
         y.append(float(example_train[len(example_train)-1]))
         X.append(xi)
 
-max_it = 10000
-result = gradientdescent.GradientDescent(w0,X,y,r,max_it)
+max_it = 15000
+result = gradientdescent.StochGradientDescent(w0,X,y,r,max_it)
 print("r = ", r)
 print("Convergence: ", result[1])
 print("Num of iterations: ", result[2])
