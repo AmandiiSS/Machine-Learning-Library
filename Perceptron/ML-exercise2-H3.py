@@ -8,7 +8,8 @@ with open(CSVfile, 'r') as f:
         x = []
         for i in range(len(example_train)-1):
             x.append(float(example_train[i]))
-        if example_train[len(example_train)-1] == 1:
+        x.append(1)
+        if int(example_train[len(example_train)-1]) == 1:
             y = float(example_train[len(example_train)-1])
         else:
             y = -1
@@ -23,7 +24,8 @@ with open(CSVfile, 'r') as f:
         x = []
         for i in range(len(example_test)-1):
             x.append(float(example_test[i]))
-        if example_test[len(example_test)-1] == 1:
+        x.append(1)
+        if int(example_test[len(example_test)-1]) == 1:
             y_test.append(1)
         else:
             y_test.append(-1)
