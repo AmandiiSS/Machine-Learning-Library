@@ -37,7 +37,7 @@ w_2a = perceptron.standard_perceptron(S,10,1)
 print("learned w:")
 print(w_2a)
 
-total_examples = len(S)
+total_examples = len(S_test)
 error_test_2a = 0
 i = 0
 for test in S_test:
