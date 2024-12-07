@@ -73,31 +73,32 @@ with open(CSVfile, 'r') as f:
             y_test.append(-1)
         S_test.append(x)
 
+Gammas = [0.1,0.5,1,5,100]
+for g in Gammas:
+    gamma = g
 
-gamma = 0.1
+    c = kernel_perceptron(S,50,gamma)
 
-c = kernel_perceptron(S,50,gamma)
+    total_test_examples = len(S_test)
+    total_train_examples = len(S)
 
-total_test_examples = len(S_test)
-total_train_examples = len(S)
-
-#TRAIN ERROR
-error_train_3b = 0
-i = 0
-for train in S:
-    prediction = predict_perceptron_kernel(c,train[0],S,gamma)
-    if prediction != train[1]:
-        error_train_3b += 1/total_train_examples
-    i += 1
-print("Average train prediction error:")
-print(error_train_3b)
-#TEST ERROR
-error_test_3b = 0
-i = 0
-for test in S_test:
-    prediction = predict_perceptron_kernel(c,test,S,gamma)
-    if prediction != y_test[i]:
-        error_test_3b += 1/total_test_examples
-    i += 1
-print("Average test prediction error:")
-print(error_test_3b)
+    #TRAIN ERROR
+    error_train_3b = 0
+    i = 0
+    for train in S:
+        prediction = predict_perceptron_kernel(c,train[0],S,gamma)
+        if prediction != train[1]:
+            error_train_3b += 1/total_train_examples
+        i += 1
+    print("Average train prediction error:")
+    print(error_train_3b)
+    #TEST ERROR
+    error_test_3b = 0
+    i = 0
+    for test in S_test:
+        prediction = predict_perceptron_kernel(c,test,S,gamma)
+        if prediction != y_test[i]:
+            error_test_3b += 1/total_test_examples
+        i += 1
+    print("Average test prediction error:")
+    print(error_test_3b)
