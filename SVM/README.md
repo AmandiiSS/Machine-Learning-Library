@@ -14,4 +14,4 @@ where:
 %%%%%%% Predict functions %%%%%%%
 predict_svm(w,x)
 
-The imput is just the result of the corresponding svm function and an example
+The input is just the result of the corresponding svm function and an example

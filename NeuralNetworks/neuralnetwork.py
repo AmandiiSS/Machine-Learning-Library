@@ -43,7 +43,7 @@ def feedForwardNN(units1,units2,w,x):
 
 #Back-propagation implementation 2(a) to compute the gradient wrt all weights given one training example
 #units_1 and units_2 are the number of units in the hidden layers 1 and 2
-#w is a list of lists of lists that returs the corresponding weight given the sollowing notation:
+#w is a list of lists of lists that returs the corresponding weight given the following notation:
 #  w_{12}^1 = w[1][1][2], or, in general, w_{nm}^l = w[l][n][m]
 #  w[0] is an empty list
 def backPropagationNN(units1,units2,w,example):
