@@ -1,6 +1,13 @@
 import math
 import copy
+import random
 
+#Auxiliar functions
+def dot(x, y):
+    dot_result = 0
+    for i in range(len(x)):
+        dot_result += x[i]*y[i]
+    return dot_result
 def sigmoid(s):
     return 1/(1+math.exp(-s))
 
@@ -86,4 +93,41 @@ def backPropagationNN(units1,units2,w,example):
             if (j != 0):
                 L_deriv_w[1][i][j]=L_deriv_vars[1][j]*var_NeuralNet[1][j]*(1-var_NeuralNet[1][j])*var_NeuralNet[0][i]
     return L_deriv_w
+
+#
+# 
+# 
+# 
+def stochastic_gradient_descent_NN(T, w0, S, gamma, width):
+    w = copy.deepcopy(w0)
+    obj_func_all_epoch = []
+    for e in range(T):
+        random.shuffle(S)
+        for example in S:
+            y = example[1]
+            x = example[0]
+            L_deriv_w = backPropagationNN(width,width,w,example)
+            for i in range(len(w)):
+                if i != 0:
+                    for j in range(len(w[i])):
+                        for k in range(len(w[i][j])):
+                            if k != 0:
+                                w[i][j][k] = w[i][j][k] - gamma[e]*L_deriv_w[i][j][k]
+        #Calculate obj function for this epoch
+        obj_func_T = 0
+        for example in S:
+            y_pred = feedForwardNN(width,width,w,example[0])[3][1]
+            obj_func_T += 0.5*pow((y_pred - example[1]), 2)
+        obj_func_all_epoch.append(obj_func_T)
+        
+    return [w,obj_func_all_epoch]
+
+def predict_NN(units1, units2, w,x):
+    NeuralNet = feedForwardNN(units1,units2,w,x)
+    if NeuralNet[3][1] <= 0:
+        return -1
+    else:
+        return 1
+
+
 

@@ -1,4 +1,5 @@
 import neuralnetwork
+import random
 
 S = []
 CSVfile = 'bank-note/train.csv'
@@ -62,3 +63,103 @@ print("The implementation is done in the neuralnetwork.py file. The implementati
 
 print("Exercise 2b:")
 print("--------------")
+total_test_examples = len(S_test)
+total_train_examples = len(S)
+T = 100
+gamma_0 = 0.001
+d = 0.5
+gamma = []
+for t in range(T):
+    gamma.append(gamma_0/(1+(gamma_0/d)*(t+1)))
+
+width = [5,10,25,50,100]
+#width = [5]
+for wid in width:
+    print("Width: ", wid)
+    # w0 construction
+    w0 = [[]]  # Empty list for input layer (Layer 0)
+    w0.append([[random.gauss(0, 1) for _ in range(wid+1)] for _ in range(len(S[0][0]))])  # Weights from input to hidden layer 1
+    w0.append([[random.gauss(0, 1) for _ in range(wid+1)] for _ in range(wid+1)])  # Weights from hidden layer 1 to hidden layer 2
+    w0.append([[random.gauss(0, 1) for _ in range(2)] for _ in range(wid+1)])  # Weights from hidden layer 2 to output
+
+    result_NN = neuralnetwork.stochastic_gradient_descent_NN(T, w0, S, gamma, wid)
+
+    w = result_NN[0]
+
+    #TRAIN ERROR
+    error_train_2b = 0
+    i = 0
+    for train in S:
+        prediction = neuralnetwork.predict_NN(wid,wid,w,train[0])
+        if prediction != train[1]:
+            error_train_2b += 1/total_train_examples
+        i += 1
+    print("Average train prediction error:")
+    print(error_train_2b)
+
+    #TEST ERROR
+    error_test_2b = 0
+    i = 0
+    for test in S_test:
+        prediction = neuralnetwork.predict_NN(wid,wid,w,test)
+        if prediction != y_test[i]:
+            error_test_2b += 1/total_test_examples
+        i += 1
+    print("Average test prediction error:")
+    print(error_test_2b)
+
+    print("Objective Function values")
+    print(result_NN[1])
+
+
+
+print("Exercise 2c:")
+print("--------------")
+
+total_test_examples = len(S_test)
+total_train_examples = len(S)
+T = 100
+gamma_0 = 0.001
+d = 0.5
+gamma = []
+for t in range(T):
+    gamma.append(gamma_0/(1+(gamma_0/d)*(t+1)))
+
+width = [5,10,25,50,100]
+#width = [5]
+for wid in width:
+    print("Width: ", wid)
+    # w0 construction
+    w0 = [[]]  # Empty list for input layer (Layer 0)
+    w0.append([[0 for _ in range(wid+1)] for _ in range(len(S[0][0]))])  # Weights from input to hidden layer 1
+    w0.append([[0 for _ in range(wid+1)] for _ in range(wid+1)])  # Weights from hidden layer 1 to hidden layer 2
+    w0.append([[0 for _ in range(2)] for _ in range(wid+1)])  # Weights from hidden layer 2 to output
+
+    result_NN = neuralnetwork.stochastic_gradient_descent_NN(T, w0, S, gamma, wid)
+
+    w = result_NN[0]
+
+    #TRAIN ERROR
+    error_train_2c = 0
+    i = 0
+    for train in S:
+        prediction = neuralnetwork.predict_NN(wid,wid,w,train[0])
+        if prediction != train[1]:
+            error_train_2c += 1/total_train_examples
+        i += 1
+    print("Average train prediction error:")
+    print(error_train_2c)
+
+    #TEST ERROR
+    error_test_2c = 0
+    i = 0
+    for test in S_test:
+        prediction = neuralnetwork.predict_NN(wid,wid,w,test)
+        if prediction != y_test[i]:
+            error_test_2c += 1/total_test_examples
+        i += 1
+    print("Average test prediction error:")
+    print(error_test_2c)
+
+    print("Objective Function values")
+    print(result_NN[1])
