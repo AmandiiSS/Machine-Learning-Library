@@ -39,7 +39,7 @@ y = data['income>50K']
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=42)
 
 # Create the AdaBoost classifier
-abc = AdaBoostClassifier(estimator=DecisionTreeClassifier(max_depth=1), n_estimators=50)
+abc = AdaBoostClassifier(estimator=DecisionTreeClassifier(max_depth=2), n_estimators=75)
 
 # Fit the model
 abc.fit(X_train, y_train)
@@ -76,4 +76,4 @@ predictions = abc.predict(X_test)
 
 #Write the results in a CSV
 submission_data = pd.DataFrame({'ID': test_data_ID, 'Prediction': predictions})
-submission_data.to_csv('predictions/submission_Amanda_SS_adaboost_test1.csv', index=False)
+submission_data.to_csv('predictions/submission_Amanda_SS_adaboost_test2_75.csv', index=False)
