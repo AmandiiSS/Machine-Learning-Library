@@ -34,31 +34,13 @@ y = data['income>50K']
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=42)
 
 # Initialize XGBoost Classifier
-xgb = XGBClassifier(
-    objective='binary:logistic',
-    eval_metric='logloss',
-    use_label_encoder=False,
-    random_state=42
-)
+xgb = XGBClassifier(objective='binary:logistic',eval_metric='logloss',use_label_encoder=False,random_state=42)
 
 # Define hyperparameters for GridSearch
-param_grid = {
-    'n_estimators': [50, 100, 200],
-    'max_depth': [3, 5, 7],
-    'learning_rate': [0.01, 0.1, 0.2],
-    'subsample': [0.8, 1.0],
-    'colsample_bytree': [0.8, 1.0]
-}
+param_grid = {'n_estimators': [50, 100, 200],'max_depth': [3, 5, 7],'learning_rate': [0.01, 0.1, 0.2],'subsample': [0.8, 1.0],'colsample_bytree': [0.8, 1.0]}
 
-# GridSearch to find the best hyperparameters
-grid_search = GridSearchCV(
-    estimator=xgb,
-    param_grid=param_grid,
-    cv=3,
-    scoring='accuracy',
-    verbose=1,
-    n_jobs=-1
-)
+# GridSearch to find the best 0
+grid_search = GridSearchCV(estimator=xgb,param_grid=param_grid,cv=3,scoring='accuracy',verbose=1,n_jobs=-1)
 
 grid_search.fit(X_train, y_train)
 
